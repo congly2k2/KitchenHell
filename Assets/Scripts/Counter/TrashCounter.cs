@@ -1,5 +1,7 @@
 
 
+using Counter;
+
 public class TrashCounter : BaseCounter
 {
     public override void Interact(Player player)
