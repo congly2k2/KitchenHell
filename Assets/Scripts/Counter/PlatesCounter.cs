@@ -7,7 +7,9 @@ namespace Counter
 
     public class PlatesCounter : BaseCounter
     {
-        public event EventHandler                OnPlateSpawned;
+        public event EventHandler OnPlateSpawned;
+        public event EventHandler OnPlateRemoved;
+        
         [SerializeField] private KitchenObjectSo plateKitchenObjectSo;
 
         private float spawnPlateTimer;
@@ -28,6 +30,23 @@ namespace Counter
                     this.platesSpawnAmount++;
                     
                     this.OnPlateSpawned?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public override void Interact(Player player)
+        {
+            if (!player.HasKitchenObject())
+            {
+                // Player is empty handed
+                if (this.platesSpawnAmount > 0)
+                {
+                    // There's at least one plate here
+                    this.platesSpawnAmount--;
+
+                    KitchenObject.SpawnKitchenObject(this.plateKitchenObjectSo, player);
+                    
+                    this.OnPlateRemoved?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
