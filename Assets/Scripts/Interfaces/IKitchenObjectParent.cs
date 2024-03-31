@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using GameBase;
 using UnityEngine;
 
-public interface IKitchenObjectParent
+namespace Interfaces
 {
-    public Transform GetKitchenObjectFollowTransform();
+    public interface IKitchenObjectParent
+    {
+        public Transform GetKitchenObjectFollowTransform();
 
 
-    public void SetKitchenObject(KitchenObject e);
+        public void SetKitchenObject(KitchenObject e);
 
 
-    public KitchenObject GetKitchenObject();
+        public KitchenObject GetKitchenObject();
 
 
-    public void ClearKitchenObject();
+        public void ClearKitchenObject();
 
 
-    public bool HasKitchenObject();
+        public bool HasKitchenObject();
 
+    }
 }

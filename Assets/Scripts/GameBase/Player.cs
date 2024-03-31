@@ -1,6 +1,7 @@
 using System;
 using Counter;
 using GameBase;
+using Interfaces;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent

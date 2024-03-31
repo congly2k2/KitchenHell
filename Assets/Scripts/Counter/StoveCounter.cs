@@ -144,6 +144,26 @@ namespace Counter
                 if (player.HasKitchenObject())
                 {
                     // Player is carrying
+                    if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                    {
+                        // Player is holding a plate
+                        if (plateKitchenObject.TryAddIngredient(this.GetKitchenObject().GetKitchenObjectSo()))
+                        {
+                            this.GetKitchenObject().DestroySelf();
+                            
+                            this.state = State.Idle;
+                
+                            this.OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
+                            {
+                                StateChanged = this.state
+                            });
+                    
+                            this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                            {
+                                ProgressNormalized = 0f
+                            });
+                        }
+                    }
                 }
                 else
                 {

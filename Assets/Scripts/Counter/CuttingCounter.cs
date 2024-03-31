@@ -44,14 +44,22 @@ namespace Counter
             }
             else
             {
-                // There is a KO !
+                // There is a KitchenObject here
                 if (player.HasKitchenObject())
                 {
-                    // Player is carrying
+                    // Player is carrying something
+                    if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                    {
+                        // Player is holding a plate
+                        if (plateKitchenObject.TryAddIngredient(this.GetKitchenObject().GetKitchenObjectSo()))
+                        {
+                            this.GetKitchenObject().DestroySelf();
+                        }
+                    }
                 }
                 else
                 {
-                    //Not carrying
+                    // Player is not carrying anything
                     this.GetKitchenObject().SetKitchenObjectParent(player);
                 }
             }

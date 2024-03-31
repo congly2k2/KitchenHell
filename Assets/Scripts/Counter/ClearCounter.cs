@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Counter
 {
+    using GameBase;
+    using Interfaces;
+
     public class ClearCounter : BaseCounter, IKitchenObjectParent
     {
         [SerializeField] private KitchenObjectSo kitchenObjectSo;
@@ -27,6 +30,28 @@ namespace Counter
                 if (player.HasKitchenObject())
                 {
                     // Player is carrying
+                    if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                    {
+                        // Player is holding a plate
+                        if (plateKitchenObject.TryAddIngredient(this.GetKitchenObject().GetKitchenObjectSo()))
+                        {
+                            this.GetKitchenObject().DestroySelf();
+                        }
+                    }
+                    else
+                    {
+                        // Player is not carrying Plate but something else
+                        if (this.GetKitchenObject().TryGetPlate(out plateKitchenObject))
+                        {
+                            // Counter is holding a plate
+                            if (plateKitchenObject.TryAddIngredient(player.GetKitchenObject().GetKitchenObjectSo()))
+                            {
+                                player.GetKitchenObject().DestroySelf();
+                            }
+
+                            
+                        }
+                    }
                 }
                 else
                 {

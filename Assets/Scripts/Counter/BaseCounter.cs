@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Counter
 {
+    using Interfaces;
+
     public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     {
         [SerializeField] private Transform counterTopPoint;
