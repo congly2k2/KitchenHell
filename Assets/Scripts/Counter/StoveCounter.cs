@@ -5,9 +5,12 @@ using UnityEngine;
 
 namespace Counter
 {
-    public class StoveCounter : BaseCounter
+    using Interfaces;
+
+    public class StoveCounter : BaseCounter, IHasProgress
     {
-        public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+        public event EventHandler<IHasProgress.OnProgressChangeEventArgs> OnProgressChange;
+        public event EventHandler<OnStateChangedEventArgs>                OnStateChanged;
         public class OnStateChangedEventArgs : EventArgs
         {
             public State StateChanged;
@@ -44,6 +47,12 @@ namespace Counter
                         break;
                     case State.Frying:
                         this.fryingTimer += Time.deltaTime;
+                        
+                        this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                        {
+                            ProgressNormalized = this.fryingTimer / this.fryingRecipeSo.fryingTimerMax
+                        });
+                        
                         if (this.fryingTimer > this.fryingRecipeSo.fryingTimerMax)
                         {
                             // Fried
@@ -63,6 +72,12 @@ namespace Counter
                         break;
                     case State.Fried:
                         this.burningTimer += Time.deltaTime;
+                        
+                        this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                        {
+                            ProgressNormalized = this.burningTimer / this.burningRecipeSo.burningTimerMax
+                        });
+                        
                         if (this.burningTimer > this.burningRecipeSo.burningTimerMax)
                         {
                             // Fried
@@ -75,6 +90,11 @@ namespace Counter
                             this.OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
                             {
                                 StateChanged = this.state
+                            });
+                            
+                            this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                            {
+                                ProgressNormalized = 0f
                             });
                         }
                         break;
@@ -106,6 +126,11 @@ namespace Counter
                         {
                             StateChanged = this.state
                         });
+                        
+                        this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                        {
+                            ProgressNormalized = this.fryingTimer / this.fryingRecipeSo.fryingTimerMax
+                        });
                     }
                 }
                 else
@@ -130,6 +155,11 @@ namespace Counter
                     this.OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
                     {
                         StateChanged = this.state
+                    });
+                    
+                    this.OnProgressChange?.Invoke(this, new IHasProgress.OnProgressChangeEventArgs()
+                    {
+                        ProgressNormalized = 0f
                     });
                 }
             }
