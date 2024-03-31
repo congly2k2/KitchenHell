@@ -6,6 +6,12 @@ namespace GameBase
 
     public class PlateKitchenObject : KitchenObject
     {
+        public event EventHandler<OnIngredientAddedEventArgs> OnIngredientAdded;
+        public class  OnIngredientAddedEventArgs : EventArgs
+        {
+            public KitchenObjectSo KitchenObjectSo;
+            
+        }
         [SerializeField] private List<KitchenObjectSo> validKitchenObjectSoList;
         
         private List<KitchenObjectSo> kitchenObjectSoList;
@@ -30,8 +36,15 @@ namespace GameBase
             else
             {
                 this.kitchenObjectSoList.Add(kitchenObjectSo);
+                
+                this.OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
+                {
+                    KitchenObjectSo = kitchenObjectSo
+                });
                 return true;
             }
         }
+
+        public List<KitchenObjectSo> GetKitchenObjectSoList() => this.kitchenObjectSoList;
     }
 }
