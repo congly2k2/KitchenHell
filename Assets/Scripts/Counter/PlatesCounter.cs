@@ -4,6 +4,7 @@ namespace Counter
 {
     using System;
     using GameBase;
+    using RecipeSO;
 
     public class PlatesCounter : BaseCounter
     {

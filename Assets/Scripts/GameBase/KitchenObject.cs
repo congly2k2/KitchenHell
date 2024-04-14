@@ -3,6 +3,7 @@ using UnityEngine;
 namespace GameBase
 {
     using Interfaces;
+    using RecipeSO;
 
     public class KitchenObject : MonoBehaviour
     {

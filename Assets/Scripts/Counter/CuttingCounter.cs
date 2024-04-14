@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Counter
 {
     using Interfaces;
+    using RecipeSO;
 
     public class CuttingCounter : BaseCounter, IHasProgress
     {

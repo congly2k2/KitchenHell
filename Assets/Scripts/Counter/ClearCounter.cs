@@ -4,6 +4,7 @@ namespace Counter
 {
     using GameBase;
     using Interfaces;
+    using RecipeSO;
 
     public class ClearCounter : BaseCounter, IKitchenObjectParent
     {

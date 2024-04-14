@@ -2,6 +2,7 @@ namespace GameBase
 {
     using System;
     using System.Collections.Generic;
+    using RecipeSO;
     using UnityEngine;
 
     public class PlateKitchenObject : KitchenObject

@@ -1,5 +1,6 @@
 namespace GameBase
 {
+    using RecipeSO;
     using UnityEngine;
     using UnityEngine.UI;
 

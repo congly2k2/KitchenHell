@@ -5,6 +5,7 @@ namespace Counter.Visual
     using System;
     using System.Collections.Generic;
     using GameBase;
+    using RecipeSO;
 
     public class PlateCompleteVisual : MonoBehaviour
     {

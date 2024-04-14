@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace Counter
 {
+    using RecipeSO;
+
     public class ContainerCounter : BaseCounter
     {
         public event EventHandler OnPlayerGrabbedObject;
