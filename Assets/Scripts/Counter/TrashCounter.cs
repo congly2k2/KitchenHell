@@ -1,14 +1,18 @@
+using System;
+using GameBase;
 
-
-using Counter;
-
-public class TrashCounter : BaseCounter
+namespace Counter
 {
-    public override void Interact(Player player)
+    public class TrashCounter : BaseCounter
     {
-        if (player.HasKitchenObject())
+        public static event EventHandler OnAnyObjectTrashed;
+        public override void Interact(Player player)
         {
+            if (!player.HasKitchenObject()) return;
+
             player.GetKitchenObject().DestroySelf();
+
+            OnAnyObjectTrashed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,12 +1,14 @@
+using System;
+using Interfaces;
 using GameBase;
 using UnityEngine;
 
 namespace Counter
 {
-    using Interfaces;
-
     public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     {
+        public static event EventHandler   OnAnyObjectPlacedHere;
+        
         [SerializeField] private Transform counterTopPoint;
 
         protected KitchenObject kitchenObject;
@@ -17,7 +19,15 @@ namespace Counter
 
         public Transform GetKitchenObjectFollowTransform() { return this.counterTopPoint; }
 
-        public void SetKitchenObject(KitchenObject e) { this.kitchenObject = e; }
+        public void SetKitchenObject(KitchenObject e)
+        {
+            this.kitchenObject = e;
+
+            if (e != null)
+            {
+                OnAnyObjectPlacedHere?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public KitchenObject GetKitchenObject() { return this.kitchenObject; }
 

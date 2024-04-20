@@ -1,4 +1,4 @@
-namespace GameBase
+namespace UI
 {
     using RecipeSO;
     using UnityEngine;

@@ -1,15 +1,15 @@
+using Interfaces;
+using RecipeSO;
 using System;
 using GameBase;
 using UnityEngine;
 
 namespace Counter
 {
-    using Interfaces;
-    using RecipeSO;
-
     public class CuttingCounter : BaseCounter, IHasProgress
     {
-        public event EventHandler<IHasProgress.OnProgressChangeEventArgs> OnProgressChange;
+        public static event EventHandler                                         OnAnyCut;
+        public event        EventHandler<IHasProgress.OnProgressChangeEventArgs> OnProgressChange;
 
         public event EventHandler OnCut;
     
@@ -74,6 +74,7 @@ namespace Counter
                 this.cuttingProgress++;
             
                 this.OnCut?.Invoke(this, EventArgs.Empty);
+                OnAnyCut?.Invoke(this, EventArgs.Empty);
 
                 var cuttingRecipeSo = this.GetCuttingRecipeSoWithInput(this.GetKitchenObject().GetKitchenObjectSo());
             

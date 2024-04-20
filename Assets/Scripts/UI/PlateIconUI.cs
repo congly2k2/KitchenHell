@@ -1,8 +1,7 @@
-using UnityEngine;
-
-namespace GameBase
+namespace UI
 {
-    using System;
+    using GameBase;
+    using UnityEngine;
 
     public class PlateIconUI : MonoBehaviour
     {
@@ -16,7 +15,7 @@ namespace GameBase
 
         private void Start()
         {
-            this.plateKitchenObject.OnIngredientAdded += PlateKitchenObject_OnIngredientAdded;
+            this.plateKitchenObject.OnIngredientAdded += this.PlateKitchenObject_OnIngredientAdded;
         }
 
         private void PlateKitchenObject_OnIngredientAdded(object sender,

@@ -1,15 +1,17 @@
+using System;
+using System.Collections.Generic;
+using RecipeSO;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
 namespace GameBase
 {
-    using System;
-    using System.Collections.Generic;
-    using RecipeSO;
-    using UnityEngine;
-    using Random = UnityEngine.Random;
-
     public class DeliveryManager : MonoBehaviour
     {
         public event EventHandler OnRecipeSpawn;
         public event EventHandler OnRecipeCompleted;
+        public event EventHandler OnRecipeSuccess;
+        public event EventHandler OnRecipeFailed;
         
         public static DeliveryManager Instance { get; private set; }
         
@@ -19,6 +21,7 @@ namespace GameBase
         private       float          spawnRecipeTimer;
         private const float          SpawnRecipeTimerMax = 4f;
         private const int            WaitingRecipeMax    = 4;
+        private       int            successfulRecipeAmount;
 
         private void Awake()
         {
@@ -74,16 +77,21 @@ namespace GameBase
 
                 if (!plateContentMatchesRecipe) continue;
                 // Player deliver correct recipe !
+                this.successfulRecipeAmount++;
                 this.waitingRecipeSoList.Remove(waitingRecipeSo);
                 
                 this.OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                this.OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
                 return;
             }
             
             // No matches found
             // Player did not a correct recipe
+            this.OnRecipeFailed?.Invoke(this, EventArgs.Empty);
         }
 
         public List<RecipeSo> GetWaitingRecipeSoList() => this.waitingRecipeSoList;
+
+        public int GetSuccessfulRecipeAmount() => this.successfulRecipeAmount;
     }
 }

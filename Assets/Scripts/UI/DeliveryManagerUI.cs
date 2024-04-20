@@ -1,6 +1,7 @@
-namespace GameBase
+namespace UI
 {
     using System;
+    using GameBase;
     using UnityEngine;
 
     public class DeliveryManagerUI : MonoBehaviour
@@ -38,6 +39,7 @@ namespace GameBase
             {
                 var recipeTransform = Instantiate(this.recipeTemplate, this.container);
                 recipeTransform.gameObject.SetActive(true);
+                recipeTransform.GetComponent<DeliveryManagerSingleUI>().SetRecipeSo(recipeSo);
             }
         }
     }

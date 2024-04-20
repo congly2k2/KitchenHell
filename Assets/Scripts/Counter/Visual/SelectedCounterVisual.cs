@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Counter.Visual
 {
+    using GameBase;
+
     public class SelectedCounterVisual : MonoBehaviour
     {
         [SerializeField] private BaseCounter  baseCounter;
