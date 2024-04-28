@@ -14,7 +14,7 @@ namespace GameBase
             {
                 this.isFirstUpdate = false;
                 
-                
+                Loader.LoaderCallback();
             }
         }
     }
