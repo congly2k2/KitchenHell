@@ -1,10 +1,10 @@
+using System;
+using GameBase;
+using TMPro;
 using UnityEngine;
 
-namespace GameBase
+namespace UI
 {
-    using System;
-    using TMPro;
-
     public class GameOverUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI number;

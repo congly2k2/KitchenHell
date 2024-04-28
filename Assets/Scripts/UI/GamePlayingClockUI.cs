@@ -1,10 +1,9 @@
+using GameBase;
 using UnityEngine;
+using UnityEngine.UI;
 
-namespace GameBase
+namespace UI
 {
-    using System;
-    using UnityEngine.UI;
-
     public class GamePlayingClockUI : MonoBehaviour
     {
         [SerializeField] private Image timerImage;

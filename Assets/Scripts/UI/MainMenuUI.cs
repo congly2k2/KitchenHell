@@ -16,6 +16,8 @@ namespace UI
         {
             this.playButton.onClick.AddListener(this.OnClickPlay);
             this.quitButton.onClick.AddListener(this.OnClickQuit);
+
+            Time.timeScale = 1f;
         }
 
         private void OnClickQuit()
