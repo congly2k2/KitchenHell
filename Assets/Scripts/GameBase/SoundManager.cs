@@ -8,13 +8,18 @@ namespace GameBase
 {
     public class SoundManager : MonoBehaviour
     {
+        private const string PlayerPrefsSoundVolume = "SoundVolume";
         public static SoundManager Instance { get; private set; }
         
         [SerializeField] private AudioClipRefsSo audioClipRefsSo;
 
+        private float volume = 1f;
+
         private void Awake()
         {
             Instance = this;
+
+            this.volume = PlayerPrefs.GetFloat(SoundManager.PlayerPrefsSoundVolume, 1f);
         }
 
         private void Start()
@@ -62,19 +67,42 @@ namespace GameBase
             if (Camera.main != null) this.PlaySound(this.audioClipRefsSo.deliverySuccess, deliveryCounter.transform.position);
         }
 
-        private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f)
+        private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volumeParam = 1f)
         {
-            this.PlaySound(audioClipArray[Random.Range(0, audioClipArray.Length)], position, volume);
+            this.PlaySound(audioClipArray[Random.Range(0, audioClipArray.Length)], position, volumeParam);
         }
         
-        private void PlaySound(AudioClip audioClip, Vector3 position, float volume = 1f)
+        private void PlaySound(AudioClip audioClip, Vector3 position, float volumeMultiplier = 1f)
         {
-            AudioSource.PlayClipAtPoint(audioClip, position, volume);
+            AudioSource.PlayClipAtPoint(audioClip, position, volumeMultiplier);
         }
 
-        public void PlayFootStepSound(Vector3 position, float volume)
+        public void PlayFootStepSound(Vector3 position, float volumeParam)
         {
-            this.PlaySound(this.audioClipRefsSo.footStep, position, volume);
+            this.PlaySound(this.audioClipRefsSo.footStep, position, volumeParam);
         }
+
+        public void PlayCountDownSound()
+        {
+            this.PlaySound(this.audioClipRefsSo.warning, Vector3.zero);
+        }
+        public void PlayWarningSound(Vector3 position)
+        {
+            this.PlaySound(this.audioClipRefsSo.warning, position);
+        }
+
+        public void ChangeVolume()
+        {
+            this.volume += .1f;
+            if (this.volume > 1f)
+            {
+                this.volume = 0f;
+            }
+
+            PlayerPrefs.SetFloat(SoundManager.PlayerPrefsSoundVolume, this.volume);
+            PlayerPrefs.Save();
+        }
+
+        public float GetVolume() => this.volume;
     }
 }

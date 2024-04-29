@@ -8,6 +8,7 @@ namespace UI
     {
         [SerializeField] private Button mainMenuBtn;
         [SerializeField] private Button resumeBtn;
+        [SerializeField] private Button optionBtn;
 
         private void Awake()
         {
@@ -19,6 +20,11 @@ namespace UI
             this.resumeBtn.onClick.AddListener(() =>
             {
                 KitchenGameManager.Instance.PauseGame();
+            });
+            
+            this.optionBtn.onClick.AddListener(() =>
+            {
+                OptionsUI.Instance.Show();
             });
         }
 

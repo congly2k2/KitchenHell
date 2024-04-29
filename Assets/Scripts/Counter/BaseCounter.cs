@@ -8,6 +8,10 @@ namespace Counter
     public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     {
         public static event EventHandler   OnAnyObjectPlacedHere;
+        public static void ResetStaticData()
+        {
+            BaseCounter.OnAnyObjectPlacedHere = null;
+        }
         
         [SerializeField] private Transform counterTopPoint;
 

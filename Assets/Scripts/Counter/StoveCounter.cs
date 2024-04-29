@@ -226,5 +226,7 @@ namespace Counter
             }
             return null;
         }
+
+        public bool IsFried() => this.state == State.Fried;
     }
 }
