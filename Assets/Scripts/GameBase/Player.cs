@@ -63,6 +63,8 @@ namespace GameBase
 
         private void Update()
         {
+            if (!this.IsOwner) return;
+            // this.HandleMovementServerAuth();
             this.HandleMovement();
             this.HandleInteractions();
         }
@@ -102,6 +104,56 @@ namespace GameBase
             {
                 this.SetSelectedCounter(null);
             }
+        }
+
+        private void HandleMovementServerAuth()
+        {
+            var inputVecotr = GameInput.Instance.GetMovementVectorNormalized();
+            this.HandleMovementServerRpc(inputVecotr);
+        }
+
+        [ServerRpc]
+        private void HandleMovementServerRpc(Vector2 inputVector)
+        {
+            var moveDir      = new Vector3(inputVector.x, 0f, inputVector.y);
+            var moveDistance = this.moveSpeed * Time.deltaTime;
+            var playerRadius = .7f;
+            var playerHeight = 2f;
+            var canMove      = !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+
+            if (!canMove)
+            {
+                var moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+                canMove = moveDir.x != 0 && !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+
+                if (canMove)
+                {
+                    moveDir = moveDirX;
+                }
+                else
+                {
+                    var moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
+                    canMove = moveDir.z != 0 && !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+
+                    if (canMove)
+                    {
+                        moveDir = moveDirZ;
+                    }
+                    else
+                    {
+                        // Stop
+                    }
+                }
+            }
+
+            if (canMove)
+            {
+                this.transform.position += moveDir * (this.moveSpeed * Time.deltaTime);
+            }
+
+            this.isWalking = moveDir != Vector3.zero;
+            const float rotateSpeed = 10f;
+            this.transform.forward = Vector3.Slerp(this.transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         }
 
         private void HandleMovement()

@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 4608766493321046522}
   - component: {fileID: 5450616031728027376}
   - component: {fileID: 398364020346569611}
+  - component: {fileID: 3824218586843864448}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -102,7 +103,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
-  gameInput: {fileID: 0}
   countersLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -119,6 +119,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b559403de9a488298d4d5fc5b3137b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3824218586843864448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8712498633598042848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0042bafc89994666a2725c7283a94063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 0
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1001 &3137345861316835715
 PrefabInstance:
   m_ObjectHideFlags: 0
