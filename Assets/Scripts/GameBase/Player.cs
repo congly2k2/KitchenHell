@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Counter;
 using Interfaces;
 using Unity.Netcode;
@@ -26,7 +27,9 @@ namespace GameBase
     
         [SerializeField] private float     moveSpeed = 7f;
         [SerializeField] private LayerMask countersLayerMask;
+        [SerializeField] private LayerMask collisionLayerMask;
         [SerializeField] private Transform kitchenObjectHoldPoint;
+        [SerializeField] private List<Vector3> spawnPositionList;
 
         private bool          isWalking;
         private Vector3       lastInteractDir;
@@ -51,6 +54,8 @@ namespace GameBase
         public override void OnNetworkSpawn()
         {
             if (this.IsOwner) LocalInstance = this;
+
+            this.transform.position = this.spawnPositionList[(int)this.OwnerClientId];
             
             OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
         }
@@ -99,7 +104,7 @@ namespace GameBase
             }
 
             var interactDistance = 2f;
-            if (Physics.Raycast(this.transform.position, this.lastInteractDir, out RaycastHit raycastHit, interactDistance, this.countersLayerMask))
+            if (Physics.Raycast(this.transform.position, this.lastInteractDir, out RaycastHit raycastHit, interactDistance, this.collisionLayerMask))
             {
                 if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter))
                 {
@@ -133,12 +138,12 @@ namespace GameBase
             var moveDistance = this.moveSpeed * Time.deltaTime;
             var playerRadius = .7f;
             var playerHeight = 2f;
-            var canMove      = !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+            var canMove      = !Physics.BoxCast(this.transform.position, Vector3.one * playerRadius, moveDir, Quaternion.identity, moveDistance, this.collisionLayerMask);
 
             if (!canMove)
             {
                 var moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
-                canMove = moveDir.x != 0 && !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDirX, moveDistance);
+                canMove = moveDir.x != 0 && !Physics.BoxCast(this.transform.position, Vector3.one * playerRadius, moveDirX, Quaternion.identity, moveDistance, this.collisionLayerMask);
 
                 if (canMove)
                 {
@@ -147,7 +152,7 @@ namespace GameBase
                 else
                 {
                     var moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
-                    canMove = moveDir.z != 0 && !Physics.CapsuleCast(this.transform.position, this.transform.position + Vector3.up * playerHeight, playerRadius, moveDirZ, moveDistance);
+                    canMove = moveDir.z != 0 && !Physics.BoxCast(this.transform.position, Vector3.one * playerRadius, moveDirZ, Quaternion.identity, moveDistance, this.collisionLayerMask);
 
                     if (canMove)
                     {
