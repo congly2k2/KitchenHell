@@ -1,3 +1,4 @@
+using System;
 using SyncNetwork;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,27 +13,47 @@ namespace GameBase
         [SerializeField] private KitchenObjectSo kitchenObjectSo;
 
         private IKitchenObjectParent kitchenObjectParent;
+        private FollowTransform followTransform;
+
+        protected virtual void Awake()
+        {
+            this.followTransform = this.GetComponent<FollowTransform>();
+        }
 
         public KitchenObjectSo GetKitchenObjectSo() { return this.kitchenObjectSo; }
 
         public void SetKitchenObjectParent(IKitchenObjectParent e)
         {
+            this.SetKitchenObjectParentServerRpc(e.GetNetworkObject());
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetKitchenObjectParentServerRpc(NetworkObjectReference kitchenObjectParentReference)
+        {
+            this.SetKitchenObjectParentClientRpc(kitchenObjectParentReference);
+        }
+
+        [ClientRpc]
+        private void SetKitchenObjectParentClientRpc(NetworkObjectReference kitchenObjectParentReference)
+        {
+            kitchenObjectParentReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject);
+            var kitchenObjectParentNetwork = kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
+            
             if (this.kitchenObjectParent != null)
             {
                 this.kitchenObjectParent.ClearKitchenObject();
             }
 
-            this.kitchenObjectParent = e;
+            this.kitchenObjectParent = kitchenObjectParentNetwork;
 
-            if (e.HasKitchenObject())
+            if (kitchenObjectParentNetwork.HasKitchenObject())
             {
                 Debug.LogError("IKitchenObjectParent already has a KitchenObject");
             }
 
-            e.SetKitchenObject(this);
+            kitchenObjectParentNetwork.SetKitchenObject(this);
 
-            // this.transform.parent        = this.kitchenObjectParent.GetKitchenObjectFollowTransform();
-            // this.transform.localPosition = Vector3.zero;
+            this.followTransform.SetTargetTransform(this.kitchenObjectParent.GetKitchenObjectFollowTransform());
         }
 
         public IKitchenObjectParent GetKitchenObjectParent() { return this.kitchenObjectParent; }

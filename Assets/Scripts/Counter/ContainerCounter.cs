@@ -1,5 +1,6 @@
 using System;
 using GameBase;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counter
@@ -18,9 +19,22 @@ namespace Counter
             {
                 // Player is not carrying anything
                 KitchenObject.SpawnKitchenObject(this.kitchenObjectSo, player);
-                this.OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+                
+                this.InteractLogicServerRpc();
             }
         
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicServerRpc()
+        {
+            this.InteractLogicClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLogicClientRpc()
+        {
+            this.OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
         }
     }
 }

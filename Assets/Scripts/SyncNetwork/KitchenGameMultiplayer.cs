@@ -15,7 +15,7 @@ namespace SyncNetwork
 
         private void Awake()
         {
-            
+            Instance = this;
         }
         
         public void SpawnKitchenObject(KitchenObjectSo kitchenObjectSo, IKitchenObjectParent kitchenObjectParent)

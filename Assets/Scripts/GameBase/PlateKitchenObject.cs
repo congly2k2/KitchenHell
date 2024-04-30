@@ -17,8 +17,9 @@ namespace GameBase
         
         private List<KitchenObjectSo> kitchenObjectSoList;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             this.kitchenObjectSoList = new List<KitchenObjectSo>();
         }
 

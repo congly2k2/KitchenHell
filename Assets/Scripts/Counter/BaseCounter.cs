@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Counter
 {
-    public class BaseCounter : MonoBehaviour, IKitchenObjectParent
+    public class BaseCounter : NetworkBehaviour, IKitchenObjectParent
     {
         public static event EventHandler   OnAnyObjectPlacedHere;
         public static void ResetStaticData()
@@ -41,7 +41,7 @@ namespace Counter
         public bool HasKitchenObject() { return this.kitchenObject != null; }
         public NetworkObject GetNetworkObject()
         {
-            return null;
+            return this.NetworkObject;
         }
     }
 }
