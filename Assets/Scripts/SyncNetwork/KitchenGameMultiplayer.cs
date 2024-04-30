@@ -65,10 +65,10 @@ namespace SyncNetwork
             kitchenObject.ClearKitchenObjectOnParent();
         }
 
-        private int GetKitchenObjectSoIndex(KitchenObjectSo kitchenObjectSo) =>
+        public int GetKitchenObjectSoIndex(KitchenObjectSo kitchenObjectSo) =>
             this.kitchenObjectListSo.kitchenObjectSoList.IndexOf(kitchenObjectSo);
         
-        private KitchenObjectSo GetKitchenObjectSoFromIndex(int kitchenObjectSoIndex) =>
+        public KitchenObjectSo GetKitchenObjectSoFromIndex(int kitchenObjectSoIndex) =>
             this.kitchenObjectListSo.kitchenObjectSoList[kitchenObjectSoIndex];
     }
 }
