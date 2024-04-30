@@ -40,6 +40,31 @@ namespace SyncNetwork
             kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
         }
 
+        public void DestroyKitchenObject(KitchenObject kitchenObject)
+        {
+            this.DestroyKitchenObjectServerRpc(kitchenObject.NetworkObject);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void DestroyKitchenObjectServerRpc(NetworkObjectReference obj)
+        {
+            obj.TryGet(out var kitchenObjectNetworkObject);
+            var kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
+            
+            this.ClearKitchenObjectOnParentClientRpc(obj);
+            
+            kitchenObject.DestroySelf();
+        }
+
+        [ClientRpc]
+        private void ClearKitchenObjectOnParentClientRpc(NetworkObjectReference obj)
+        {
+            obj.TryGet(out var kitchenObjectNetworkObject);
+            var kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
+            
+            kitchenObject.ClearKitchenObjectOnParent();
+        }
+
         private int GetKitchenObjectSoIndex(KitchenObjectSo kitchenObjectSo) =>
             this.kitchenObjectListSo.kitchenObjectSoList.IndexOf(kitchenObjectSo);
         

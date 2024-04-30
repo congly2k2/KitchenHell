@@ -60,9 +60,14 @@ namespace GameBase
 
         public void DestroySelf()
         {
-            this.kitchenObjectParent.ClearKitchenObject();
+            this.ClearKitchenObjectOnParent();
 
             Destroy(this.gameObject);
+        }
+
+        public void ClearKitchenObjectOnParent()
+        {
+            this.kitchenObjectParent.ClearKitchenObject();
         }
 
         public bool TryGetPlate(out PlateKitchenObject plateKitchenObject)
@@ -80,6 +85,11 @@ namespace GameBase
         public static void SpawnKitchenObject(KitchenObjectSo kitchenObjectSo, IKitchenObjectParent kitchenObjectParent)
         {
             KitchenGameMultiplayer.Instance.SpawnKitchenObject(kitchenObjectSo, kitchenObjectParent);
+        }
+
+        public static void DestroyKitchenObject(KitchenObject kitchenObject)
+        {
+            KitchenGameMultiplayer.Instance.DestroyKitchenObject(kitchenObject);
         }
     }
 }

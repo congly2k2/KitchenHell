@@ -1,5 +1,6 @@
 using System;
 using GameBase;
+using Unity.Netcode;
 
 namespace Counter
 {
@@ -15,8 +16,20 @@ namespace Counter
         {
             if (!player.HasKitchenObject()) return;
 
-            player.GetKitchenObject().DestroySelf();
+            KitchenObject.DestroyKitchenObject(player.GetKitchenObject());
+            
+            this.InteractLogicServerRpc();
+        }
 
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicServerRpc()
+        {
+            this.InteractLogicClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLogicClientRpc()
+        {
             OnAnyObjectTrashed?.Invoke(this, EventArgs.Empty);
         }
     }
