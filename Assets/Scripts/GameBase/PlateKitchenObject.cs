@@ -1,3 +1,6 @@
+using SyncNetwork;
+using Unity.Netcode;
+
 namespace GameBase
 {
     using System;
@@ -37,14 +40,27 @@ namespace GameBase
             }
             else
             {
-                this.kitchenObjectSoList.Add(kitchenObjectSo);
-                
-                this.OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
-                {
-                    KitchenObjectSo = kitchenObjectSo
-                });
+                this.AddIngredientServerRpc(KitchenGameMultiplayer.Instance.GetKitchenObjectSoIndex(kitchenObjectSo));
                 return true;
             }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void AddIngredientServerRpc(int kitchenObjectSoIndex)
+        {
+            this.AddIngredientClientRpc(kitchenObjectSoIndex);
+        }
+        
+        [ClientRpc]
+        private void AddIngredientClientRpc(int index)
+        {
+            var kitchenObjectSo = KitchenGameMultiplayer.Instance.GetKitchenObjectSoFromIndex(index);
+            this.kitchenObjectSoList.Add(kitchenObjectSo);
+                
+            this.OnIngredientAdded?.Invoke(this, new OnIngredientAddedEventArgs
+            {
+                KitchenObjectSo = kitchenObjectSo
+            });
         }
 
         public List<KitchenObjectSo> GetKitchenObjectSoList() => this.kitchenObjectSoList;

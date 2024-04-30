@@ -155,9 +155,9 @@ namespace Counter
                         // Player is holding a plate
                         if (plateKitchenObject.TryAddIngredient(this.GetKitchenObject().GetKitchenObjectSo()))
                         {
-                            this.GetKitchenObject().DestroySelf();
+                            KitchenObject.DestroyKitchenObject(this.GetKitchenObject());
                             
-                            this.state.Value = State.Idle;
+                            this.SetStatIdleServerRpc();
                         }
                     }
                 }
