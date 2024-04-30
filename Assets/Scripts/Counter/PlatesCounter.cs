@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counter
@@ -21,6 +22,7 @@ namespace Counter
 
         private void Update()
         {
+            if (!this.IsServer) return;
             this.spawnPlateTimer += Time.deltaTime;
             if (this.spawnPlateTimer > this.spawnPlateTimerMax)
             {
@@ -28,11 +30,23 @@ namespace Counter
 
                 if (this.platesSpawnAmount < this.platesSpawnAmountMax)
                 {
-                    this.platesSpawnAmount++;
-                    
-                    this.OnPlateSpawned?.Invoke(this, EventArgs.Empty);
+                    this.SpawnPlateServerRpc();
                 }
             }
+        }
+
+        [ServerRpc]
+        private void SpawnPlateServerRpc()
+        {
+            this.SpawnPlateClientRpc();
+        }
+
+        [ClientRpc]
+        private void SpawnPlateClientRpc()
+        {
+            this.platesSpawnAmount++;
+                    
+            this.OnPlateSpawned?.Invoke(this, EventArgs.Empty);
         }
 
         public override void Interact(Player player)
@@ -43,13 +57,24 @@ namespace Counter
                 if (this.platesSpawnAmount > 0)
                 {
                     // There's at least one plate here
-                    this.platesSpawnAmount--;
-
                     KitchenObject.SpawnKitchenObject(this.plateKitchenObjectSo, player);
                     
-                    this.OnPlateRemoved?.Invoke(this, EventArgs.Empty);
+                    this.InteractLogicServerRpc();
                 }
             }
+        }
+        
+        [ServerRpc(RequireOwnership = false)]
+        private void InteractLogicServerRpc()
+        {
+            this.InteractLogicClientRpc();
+        }
+
+        [ClientRpc]
+        private void InteractLogicClientRpc()
+        {
+            this.platesSpawnAmount--;
+            this.OnPlateRemoved?.Invoke(this, EventArgs.Empty);
         }
     }
 }
