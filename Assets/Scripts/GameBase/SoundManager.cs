@@ -27,7 +27,7 @@ namespace GameBase
             DeliveryManager.Instance.OnRecipeSuccess += this.DeliveryManager_OnRecipeSuccess;
             DeliveryManager.Instance.OnRecipeFailed  += this.DeliveryManager_OnRecipeFailed;
             CuttingCounter.OnAnyCut                  += this.CuttingCounter_OnAnyCut;
-            // Player.Instance.OnPickedSomething        += this.Player_OnPickedSomething;
+            Player.OnAnyPickedSomething        += this.Player_OnPickedSomething;
             BaseCounter.OnAnyObjectPlacedHere        += this.BaseCounter_OnAnyObjectPlacedHere;
             TrashCounter.OnAnyObjectTrashed          += this.TrashCounter_OnAnyObjectTrashed;
         }
@@ -46,7 +46,8 @@ namespace GameBase
 
         private void Player_OnPickedSomething(object sender, EventArgs e)
         {
-            // this.PlaySound(this.audioClipRefsSo.objectPickup, Player.Instance.transform.position);
+            var player = sender as Player;
+            if (player != null) this.PlaySound(this.audioClipRefsSo.objectPickup, player.transform.position);
         }
 
         private void CuttingCounter_OnAnyCut(object sender, EventArgs e)

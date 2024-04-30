@@ -11,6 +11,7 @@ namespace GameBase
             CuttingCounter.ResetStaticData();
             BaseCounter.ResetStaticData();
             TrashCounter.ResetStaticData();
+            Player.ResetStaticData();
         }
     }
 }

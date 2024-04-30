@@ -8,7 +8,14 @@ namespace GameBase
 {
     public class Player : NetworkBehaviour, IKitchenObjectParent
     {
-        // public static Player Instance { get; private set; }
+        public static event EventHandler OnAnyPlayerSpawned;
+        public static event EventHandler OnAnyPickedSomething;
+        
+        public new static void ResetStaticData()
+        {
+            Player.OnAnyPlayerSpawned = null;
+        }
+        public static Player LocalInstance { get; private set; }
 
         public event EventHandler                                    OnPickedSomething; 
         public event EventHandler<SelectedCounterChangedEventAgrs> OnSelectedCounterChange;
@@ -39,6 +46,13 @@ namespace GameBase
         {
             GameInput.Instance.OnInteractAction          += this.GameInput_OnInteraction;
             GameInput.Instance.OnInteractAlternateAction += this.GameInput_OnInteractAlternateAction;
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            if (this.IsOwner) LocalInstance = this;
+            
+            OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
         }
 
         private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -221,6 +235,7 @@ namespace GameBase
             if (e != null)
             {
                 this.OnPickedSomething?.Invoke(this, EventArgs.Empty);
+                OnAnyPickedSomething?.Invoke(this, EventArgs.Empty);
             }
         }
 

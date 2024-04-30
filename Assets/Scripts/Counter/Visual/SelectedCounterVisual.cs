@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 namespace Counter.Visual
@@ -12,7 +13,24 @@ namespace Counter.Visual
 
         private void Start()
         {
-            // Player.Instance.OnSelectedCounterChange += this.Player_OnSelectedCounterChange;
+            if (Player.LocalInstance != null)
+            { 
+                Player.LocalInstance.OnSelectedCounterChange += this.Player_OnSelectedCounterChange;
+            }
+            else
+            {
+                Player.OnAnyPlayerSpawned += this.Player_OnAnyPlayerSpawned;
+            }
+            
+        }
+
+        private void Player_OnAnyPlayerSpawned(object sender, EventArgs e)
+        {
+            if (Player.LocalInstance != null)
+            { 
+                Player.LocalInstance.OnSelectedCounterChange -= this.Player_OnSelectedCounterChange;
+                Player.LocalInstance.OnSelectedCounterChange += this.Player_OnSelectedCounterChange;
+            }
         }
 
         private void Player_OnSelectedCounterChange(object sender,
