@@ -26,7 +26,7 @@ namespace GameBase
         private float countDownToStartTimer = 3f;
         private float gamePlayingTimer;
         private bool isPausedGame;
-        private const float GamePlayingTimerMax = 10f;
+        private const float GamePlayingTimerMax = 300f;
 
         private void Awake()
         {
@@ -36,7 +36,11 @@ namespace GameBase
 
         private void Start()
         {
-            GameInput.Instance.OnPauseAction += GameInput_OnPauseAction;
+            GameInput.Instance.OnPauseAction += this.GameInput_OnPauseAction;
+            
+            // Debug trigger game start automatically
+            this.state = State.CountDownToStart;
+            this.OnStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void GameInput_OnPauseAction(object sender, EventArgs e)

@@ -12,11 +12,11 @@ namespace Counter.Visual
 
         private void Start()
         {
-            Player.Instance.OnSelectedCounterChange += this.Player_OnSelectedCounterChange;
+            // Player.Instance.OnSelectedCounterChange += this.Player_OnSelectedCounterChange;
         }
 
         private void Player_OnSelectedCounterChange(object sender,
-            Player.OnSelectedCounterChangedEventAgrs e)
+            Player.SelectedCounterChangedEventAgrs e)
         {
             if (e.SelectedCounter == this.baseCounter)
             {

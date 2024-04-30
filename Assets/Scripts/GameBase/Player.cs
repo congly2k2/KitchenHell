@@ -1,23 +1,23 @@
 using System;
 using Counter;
 using Interfaces;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace GameBase
 {
-    public class Player : MonoBehaviour, IKitchenObjectParent
+    public class Player : NetworkBehaviour, IKitchenObjectParent
     {
-        public static Player Instance { get; private set; }
+        // public static Player Instance { get; private set; }
 
         public event EventHandler                                    OnPickedSomething; 
-        public event EventHandler<OnSelectedCounterChangedEventAgrs> OnSelectedCounterChange;
-        public class OnSelectedCounterChangedEventAgrs : EventArgs
+        public event EventHandler<SelectedCounterChangedEventAgrs> OnSelectedCounterChange;
+        public class SelectedCounterChangedEventAgrs : EventArgs
         {
             public BaseCounter SelectedCounter;
         }
     
         [SerializeField] private float     moveSpeed = 7f;
-        [SerializeField] private GameInput gameInput;
         [SerializeField] private LayerMask countersLayerMask;
         [SerializeField] private Transform kitchenObjectHoldPoint;
 
@@ -28,17 +28,17 @@ namespace GameBase
 
         private void Awake()
         {
-            if (Instance != null)
-            {
-                Debug.LogError("There is more than one Player");
-            }
-            Instance = this;
+            // if (Instance != null)
+            // {
+            //     Debug.LogError("There is more than one Player");
+            // }
+            // Instance = this;
         }
 
         private void Start()
         {
-            this.gameInput.OnInteractAction          += this.GameInput_OnInteraction;
-            this.gameInput.OnInteractAlternateAction += this.GameInput_OnInteractAlternateAction;
+            GameInput.Instance.OnInteractAction          += this.GameInput_OnInteraction;
+            GameInput.Instance.OnInteractAlternateAction += this.GameInput_OnInteractAlternateAction;
         }
 
         private void GameInput_OnInteractAlternateAction(object sender, EventArgs e)
@@ -74,7 +74,7 @@ namespace GameBase
 
         private void HandleInteractions()
         {
-            var inputVector = this.gameInput.GetMovementVectorNormalized();
+            var inputVector = GameInput.Instance.GetMovementVectorNormalized();
             var moveDir     = new Vector3(inputVector.x, 0f, inputVector.y);
 
             if (moveDir != Vector3.zero)
@@ -106,7 +106,7 @@ namespace GameBase
 
         private void HandleMovement()
         {
-            var inputVector  = this.gameInput.GetMovementVectorNormalized();
+            var inputVector  = GameInput.Instance.GetMovementVectorNormalized();
             var moveDir      = new Vector3(inputVector.x, 0f, inputVector.y);
             var moveDistance = this.moveSpeed * Time.deltaTime;
             var playerRadius = .7f;
@@ -151,7 +151,7 @@ namespace GameBase
         private void SetSelectedCounter(BaseCounter selectedCounterParam)
         {
             this.selectedCounter = selectedCounterParam;
-            this.OnSelectedCounterChange?.Invoke(this, new OnSelectedCounterChangedEventAgrs()
+            this.OnSelectedCounterChange?.Invoke(this, new SelectedCounterChangedEventAgrs()
             {
                 SelectedCounter = this.selectedCounter
             });
