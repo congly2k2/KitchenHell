@@ -11,7 +11,7 @@ namespace GameBase
         public static event EventHandler OnAnyPlayerSpawned;
         public static event EventHandler OnAnyPickedSomething;
         
-        public new static void ResetStaticData()
+        public static void ResetStaticData()
         {
             Player.OnAnyPlayerSpawned = null;
         }
