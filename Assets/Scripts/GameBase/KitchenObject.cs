@@ -1,3 +1,5 @@
+using SyncNetwork;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace GameBase
@@ -5,7 +7,7 @@ namespace GameBase
     using Interfaces;
     using RecipeSO;
 
-    public class KitchenObject : MonoBehaviour
+    public class KitchenObject : NetworkBehaviour
     {
         [SerializeField] private KitchenObjectSo kitchenObjectSo;
 
@@ -29,8 +31,8 @@ namespace GameBase
 
             e.SetKitchenObject(this);
 
-            this.transform.parent        = this.kitchenObjectParent.GetKitchenObjectFollowTransform();
-            this.transform.localPosition = Vector3.zero;
+            // this.transform.parent        = this.kitchenObjectParent.GetKitchenObjectFollowTransform();
+            // this.transform.localPosition = Vector3.zero;
         }
 
         public IKitchenObjectParent GetKitchenObjectParent() { return this.kitchenObjectParent; }
@@ -54,14 +56,9 @@ namespace GameBase
             return false;
         }
 
-        public static KitchenObject SpawnKitchenObject(KitchenObjectSo kitchenObjectSo,
-            IKitchenObjectParent kitchenObjectParent)
+        public static void SpawnKitchenObject(KitchenObjectSo kitchenObjectSo, IKitchenObjectParent kitchenObjectParent)
         {
-            Transform     kitchenObjectTransform = Instantiate(kitchenObjectSo.prefab);
-            KitchenObject kitchenObject          = kitchenObjectTransform.GetComponent<KitchenObject>();
-            kitchenObject.SetKitchenObjectParent(kitchenObjectParent);
-
-            return kitchenObject;
+            KitchenGameMultiplayer.Instance.SpawnKitchenObject(kitchenObjectSo, kitchenObjectParent);
         }
     }
 }

@@ -253,5 +253,10 @@ namespace GameBase
         {
             return this.kitchenObject != null;
         }
+
+        public NetworkObject GetNetworkObject()
+        {
+            return this.NetworkObject;
+        }
     }
 }

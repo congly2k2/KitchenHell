@@ -1,6 +1,7 @@
 using System;
 using Interfaces;
 using GameBase;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Counter
@@ -38,5 +39,9 @@ namespace Counter
         public void ClearKitchenObject() { this.kitchenObject = null; }
 
         public bool HasKitchenObject() { return this.kitchenObject != null; }
+        public NetworkObject GetNetworkObject()
+        {
+            return null;
+        }
     }
 }

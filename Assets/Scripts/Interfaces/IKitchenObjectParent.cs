@@ -1,4 +1,5 @@
 using GameBase;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Interfaces
@@ -18,6 +19,8 @@ namespace Interfaces
 
 
         public bool HasKitchenObject();
+
+        public NetworkObject GetNetworkObject();
 
     }
 }
